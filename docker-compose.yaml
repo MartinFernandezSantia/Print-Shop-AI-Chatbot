@@ -17,6 +17,9 @@ services:
     entrypoint: docker/entrypoints/rails.sh
     command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
     restart: always
+    networks:
+      - default
+      - dokploy-network
 
   sidekiq:
     <<: *base
@@ -65,9 +68,16 @@ services:
       - N8N_BLOCK_ENV_ACCESS_IN_NODE=false
     volumes:
       - n8n_data:/home/node/.n8n
+    networks:
+      - default
+      - dokploy-network
 
 volumes:
   storage_data:
   postgres_data:
   redis_data:
   n8n_data:
+
+networks:
+  dokploy-network:
+    external: true
